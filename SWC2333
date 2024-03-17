@@ -1,0 +1,76 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+class Employee {
+    String name;
+    double employeeBaseSalary;
+    int employeeYearsOfWorking;
+
+    public Employee(String name, double employeeBaseSalary, int employeeYearsOfWorking){
+        this.name = name;
+        this.employeeBaseSalary= employeeBaseSalary;
+        this.employeeYearsOfWorking = employeeYearsOfWorking;
+    }
+
+    public double calculateAnnualSalary() {
+        return employeeBaseSalary + (employeeBaseSalary * 0.05 * yearsOfService);
+    }
+
+    public class EmployeeSalaryProcessor {
+        public static void main(String[] args) {
+            List<Employee> employees = new ArrayList<>();
+            String inputFilePath = "C:\\Users\\Acer\\Desktop\\employeeSalaries.txt.lnk";
+            Scanner = new Scanner(System.in);
+            System.out.print("Enter the path to the output file:");
+            String outputFilePath = scanner.nextLine();
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(inputFilePath));
+            PrintWriter writer = new PrintWriter(new FileWriter(outputFilePath))) {
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    try {
+                        String[] parts = line.split("\\|");
+                        String name = parts[0].trim();
+                        doubleemployeeBaseSalary = Double.parseDouble(parts[1].trim());
+                        int employeeYearsOfWorking = Integer.parseInt(parts[2].trim());
+                        employees.add(new Employee(name,employeeBaseSalary, employeeYearsOfWorking));
+                    } catch (Exception e) {
+                        System.out.println("Skipping invalid record: " + line);
+                    }
+
+                }
+
+                Employee topPerformer = null;
+                Employee leastExperienced = nul;
+
+                for (Employee emp : employees) {
+                    if (topPerformer == null || emp.calculateAnnualSalary() > topPerformer.calculateAnnualSalary()) {
+                        topPerformer = emp;
+                    }
+                    if (leastExperienced == null || emp.employeeYearsOfWorking < leastExperienced.employeeYearsOfWorking) {
+                        leastExperienced = emp;
+                    }
+                    writer.println(emp.name + " | " + emp.calculateAnnualSalary() + " | " +emp.employeeYearsOfWorking);           
+                }
+
+                if(topPerformer != null) {
+                    writer.println("TOP PERFORMER");
+                    writer.println("Name: " + topPerformer.name);
+                    writer.println("Annual Salary: " + topPerformer.calculateAnnualSalary());
+                    writer.println("Years Of Service: " + topPerformer.employeeYearsOfWorking);       
+                }
+
+                if(leastExperienced != null) {
+                    writer.println("EMPLOYEE WITH LEAST YEARS OF SERVICE");
+                    writer.println("Name: " + leastExperienced.name);
+                    writer.println("Annual Salary: " + leastExperienced.calculateAnnualSalary());
+                    writer.println("Years Of Service: " + leastExperienced.employeeYearsOfWorking);         
+                }
+
+                System.out.println("Processing complete. Check " + outputFilePath + " for details.");
+            } catch (IOException e) {
+                System.err.println("ERROR OCCURED: " + e.getMessage());
+            }
+        }
